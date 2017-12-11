@@ -38,7 +38,11 @@ class FurnitureDetailVC: UIViewController, UIImagePickerControllerDelegate, UINa
         furnitureDescriptionLabel.text = furniture.description
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        <#code#>
+       if let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            furniture?.imageData = UIImagePNGRepresentation(selectedImage)
+        }
+        dismiss(animated: true, completion: nil)
+        updateView()
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
@@ -78,7 +82,16 @@ class FurnitureDetailVC: UIViewController, UIImagePickerControllerDelegate, UINa
         present(alertController, animated: true, completion: nil)
     }
     
-    @IBAction func actionButtonTapped(_ sender: Any) {
+    @IBAction func actionButtonTapped(_ sender: UIButton) {
+    
+        if let imageData = furniture?.imageData, let image = UIImage(data: imageData) {
+            
+            let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+            
+            activityController.popoverPresentationController?.sourceView = sender
+            
+            present(activityController, animated: true, completion: nil)
+        }
         
     }
 
